@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading/Loading';
+import '../style/cart.css'
 
 type Product = {
   id: number;
@@ -82,62 +83,49 @@ function CartPage() {
 
   if (loading) { <Loading />; }
   return (
-    <div>
-      <h2>Carrinho de Compras</h2>
+    <div className="cart-page-container">
+      <h2 className="cart-title">Carrinho de Compras</h2>
       {cart.length === 0 ? (
-        <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
+        <p className="empty-cart-message" data-testid="shopping-cart-empty-message">
+          Seu carrinho está vazio
+        </p>
       ) : (
-        cart.map((product, index) => (
-          <div key={ product.id } className="cart-item">
-            <h3
-              data-testid="shopping-cart-product-name"
-            >
-              {product.title}
-            </h3>
-            <img src={ product.thumbnail } alt={ product.title } />
-            <p>
-              Preço: R$
-              {product.price}
-            </p>
-            <p
-              data-testid="shopping-cart-product-quantity"
-            >
-              Quantidade:
-              {product.quantity}
-            </p>
-            <button
-              data-testid="remove-product"
-              onClick={ () => removeProduct(index) }
-            >
-              Remover
-
+        <div>
+          {cart.map((product, index) => (
+            <div key={product.id} className="cart-item">
+              <h3 data-testid="shopping-cart-product-name">{product.title}</h3>
+              <img src={product.thumbnail} alt={product.title} className="product-image" />
+              <p>
+                Preço: R${product.price}
+              </p>
+              <p data-testid="shopping-cart-product-quantity">
+                Quantidade: {product.quantity}
+              </p>
+              <button data-testid="remove-product" onClick={() => removeProduct(index)} className="button remove-button">
+                Remover
+              </button>
+              <button
+                data-testid="product-increase-quantity"
+                onClick={() => addQuantity(product, index)}
+                disabled={product.quantity >= product.available_quantity}
+                className="button add-button"
+              >
+                Adicionar
+              </button>
+              <button data-testid="product-decrease-quantity" onClick={() => decreaseQuantity(product, index)} className="button decrease-button">
+                Diminuir
+              </button>
+            </div>
+          ))}
+          {cart.length > 0 && (
+            <button data-testid="checkout-products" onClick={() => checkoutPage()} className="button checkout-button">
+              Finalizar compra
             </button>
-            <button
-              data-testid="product-increase-quantity"
-              onClick={ () => addQuantity(product, index) }
-              disabled={ product.quantity >= product.available_quantity }
-            >
-              Adicionar
-            </button>
-            <button
-              data-testid="product-decrease-quantity"
-              onClick={ () => decreaseQuantity(product, index) }
-            >
-              Diminuir
-
-            </button>
-          </div>
-        ))
+          )}
+        </div>
       )}
-      <button
-        data-testid="checkout-products"
-        onClick={ () => checkoutPage() }
-      >
-        Finalizar compra
-      </button>
-      <p>
-        Total de itens no carrinho:
-        {totalCartItems}
+      <p className="total-items">
+        Total de itens no carrinho: {totalCartItems}
       </p>
       <Link to="/">Voltar para a Página Inicial</Link>
     </div>

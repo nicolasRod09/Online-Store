@@ -4,7 +4,9 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Detalhes from './components/Detalhes/Detalhes';
 import Checkout from './pages/Checkout';
-import './App.css';
+import './index.css'
+import './style/home.css';
+// import './style/cart.css'
 
 type ProductInfoType = {
   id: string;

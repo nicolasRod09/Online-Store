@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as api from '../../services/api';
 import Loading from '../Loading/Loading';
+import Header from '../Header/Header';
 
 const VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -97,10 +98,12 @@ function Detalhes() {
   };
   return (
     <div>
+      <Header  />
       { details ? (
-        <>
-          <h1>DETALHES PRODUTO</h1>
-          <h3 data-testid="product-detail-name">{details.title}</h3>
+        <div className="details-card">
+          <div className="details-title">
+            <h1 data-testid="product-detail-name">{details.title}</h1>
+          </div>
           <img
             src={ details.thumbnail }
             alt="Imagem do produto"
@@ -116,7 +119,7 @@ function Detalhes() {
               itens)
             </p>
           </Link>
-        </>
+        </div>
       ) : (
         <Loading />
       )}
@@ -126,93 +129,71 @@ function Detalhes() {
       >
         Adicionar ao carrinho
       </button>
-      <Link to="/">
+      <Link to="/" className="mt-4 block">
         Voltar
       </Link>
-      <form>
-        <label>
-          Email:
+      <form className="w-full max-w-sm mt-8">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            Email:
+          </label>
           <input
             type="email"
             data-testid="product-detail-email"
             name="email"
-            onChange={ handleForm }
-            value={ form.email }
+            onChange={handleForm}
+            value={form.email}
+            className="form-control appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           />
-        </label>
-        <div>
-          <p>Avaliação</p>
-          <label>
-            1
-            <input
-              type="radio"
-              name="rating"
-              onChange={ handleForm }
-              data-testid="1-rating"
-              value="1"
-            />
-          </label>
-          <label>
-            2
-            <input
-              type="radio"
-              name="rating"
-              onChange={ handleForm }
-              data-testid="2-rating"
-              value="2"
-            />
-          </label>
-          <label>
-            3
-            <input
-              type="radio"
-              name="rating"
-              onChange={ handleForm }
-              data-testid="3-rating"
-              value="3"
-            />
-          </label>
-          <label>
-            4
-            <input
-              type="radio"
-              name="rating"
-              onChange={ handleForm }
-              data-testid="4-rating"
-              value="4"
-            />
-          </label>
-          <label>
-            5
-            <input
-              type="radio"
-              name="rating"
-              onChange={ handleForm }
-              data-testid="5-rating"
-              value="5"
-            />
-          </label>
+        </div>
+        <div className="mb-4">
+          <p className="text-gray-700 text-sm font-bold mb-2">Avaliação</p>
+          {[1, 2, 3, 4, 5].map((rating) => (
+            <label key={rating} className="block text-gray-500">
+              {rating}
+              <input
+                type="radio"
+                name="rating"
+                onChange={handleForm}
+                data-testid={`${rating}-rating`}
+                value={rating.toString()}
+                className="ml-2"
+              />
+            </label>
+          ))}
         </div>
         <textarea
           data-testid="product-detail-evaluation"
           name="text"
-          onChange={ handleForm }
-          value={ form.text }
+          onChange={handleForm}
+          value={form.text}
+          className="form-control appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-24 resize-none"
         />
         <button
           data-testid="submit-review-btn"
-          onClick={ handleSubmitReview }
+          onClick={handleSubmitReview}
+          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Enviar
         </button>
-        {isVerified && <p data-testid="error-msg">Campos inválidos</p>}
+        {isVerified && (
+          <p data-testid="error-msg" className="text-red-500 text-sm mt-2">
+            Campos inválidos
+          </p>
+        )}
       </form>
-      <div>
+      <div className="mt-8">
         {evaluations.map((evaluation) => (
-          <div key={ evaluation.text }>
-            <h3 data-testid="review-card-email">{evaluation.email}</h3>
-            <h4 data-testid="review-card-rating">{evaluation.rating}</h4>
-            <p data-testid="review-card-evaluation">{evaluation.text}</p>
+          <div key={evaluation.text} className="mb-4 border p-4">
+            <h3 data-testid="review-card-email" className="text-lg font-semibold">
+              {evaluation.email}
+            </h3>
+            <h4 data-testid="review-card-rating" className="text-md font-medium mt-2">
+              {evaluation.rating}
+            </h4>
+            <p data-testid="review-card-evaluation" className="text-gray-700 mt-2">
+              {evaluation.text}
+            </p>
           </div>
         ))}
       </div>
