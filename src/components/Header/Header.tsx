@@ -37,7 +37,7 @@ const Header = ({cartItens}: CartItensProps) => {
         <div className="search-form">
           <input
             type="text"
-            placeholder="Digite o que você busca"
+            placeholder="Pesquise"
             onChange={ (event) => handleChange(event) }
             data-testid="query-input"
             className="searchArea"
