@@ -66,7 +66,7 @@ function Home() {
 
   return (
     <div>
-      <Header />
+      <Header cartItens={ totalCartItems } />
       <Categories onCategoryClick={ handleCategoryClick } />
       <div className="products-display">
         <div className="products-container">

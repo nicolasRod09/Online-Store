@@ -98,7 +98,7 @@ function Detalhes() {
   };
   return (
     <div>
-      <Header  />
+      <Header cartItens={totalCartItems}  />
       { details ? (
         <div className="details-card">
           <div className="details-title">

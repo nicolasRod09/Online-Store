@@ -7,8 +7,11 @@ import * as api from '../../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-const Header = () => {
-  const [totalCartItems, setTotalCartItems] = useState(0);
+type CartItensProps = {
+  cartItens: number,
+}
+
+const Header = ({cartItens}: CartItensProps) => {
   const [pesquisar, setPesquisar] = useState('');
   const [resultadoBusca, setResultadoBusca] = useState([]);
 
@@ -46,7 +49,7 @@ const Header = () => {
         <Link to="/cart" data-testid="shopping-cart-button">
            <img src="src/img/cartIcon.png" alt="cartIcon" className="cartImg" />
           <span className="cartItemCount">
-            {totalCartItems}
+            {cartItens}
             {' '}
           </span>
         </Link>
