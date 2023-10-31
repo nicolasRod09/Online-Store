@@ -28,7 +28,7 @@ const Header = () => {
       <div className="header_category">
       <header>
         <label data-testid="home-initial-message" className="img-case">
-            <img src="/src/img/logo.png" alt="icon" className="logo-img"/>
+            <img src="src/img/logo.png" alt="icon" className="logo-img"/>
             <h1 className="logo">Online Store</h1>
           </label>
         <div className="search-form">
@@ -44,7 +44,7 @@ const Header = () => {
           </button>
         </div>
         <Link to="/cart" data-testid="shopping-cart-button">
-           <img src="/src/img/cartIcon.png" alt="cartIcon" className="cartImg" />
+           <img src="src/img/cartIcon.png" alt="cartIcon" className="cartImg" />
           <span className="cartItemCount">
             {totalCartItems}
             {' '}
