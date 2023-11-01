@@ -29,7 +29,7 @@ const Header = ({ cartItens, func, display }: CartItensProps) => {
         <header>
           <Link to="/">
             <label data-testid="home-initial-message" className="img-case">
-              <img src="https://www.pngarts.chttps://uploaddeimagens.com.br/images/004/653/953/full/logo.png?1698880726om/files/13/Vector-Cart-Free-PNG-Image.png" alt="icon" className="logo-img" />
+              <img src="https://uploaddeimagens.com.br/images/004/653/953/full/logo.png?1698880726" alt="icon" className="logo-img" />
               <h1 className="logo">Online Store</h1>
             </label>
           </Link>
