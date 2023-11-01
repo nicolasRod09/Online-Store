@@ -29,7 +29,7 @@ const Header = ({ cartItens, func, display }: CartItensProps) => {
         <header>
           <Link to="/">
             <label data-testid="home-initial-message" className="img-case">
-              <img src="src/img/logo.png" alt="icon" className="logo-img" />
+              <img src="https://www.pngarts.chttps://uploaddeimagens.com.br/images/004/653/953/full/logo.png?1698880726om/files/13/Vector-Cart-Free-PNG-Image.png" alt="icon" className="logo-img" />
               <h1 className="logo">Online Store</h1>
             </label>
           </Link>
@@ -48,7 +48,7 @@ const Header = ({ cartItens, func, display }: CartItensProps) => {
             </div>
           ) : null}
           <Link to="/cart" data-testid="shopping-cart-button">
-            <img src="src/img/cartIcon.png" alt="cartIcon" className="cartImg" />
+            <img src="https://www.pngarts.com/files/13/Vector-Cart-Free-PNG-Image.png" alt="cartIcon" className="cartImg" />
             <span className="cartItemCount">
               {cartItens}
               {' '}
