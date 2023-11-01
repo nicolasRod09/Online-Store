@@ -70,8 +70,14 @@ function CheckoutPage(prop: CheckoutProps) {
             <h3>{product.title}</h3>
             <img src={product.thumbnail} alt={product.title} />
             <p className="checkout-item-price">
-              Preço: R$
-              {product.price}
+              Preço:
+              {''}
+              {product.price.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+              })
+              }
             </p>
             <p className="checkout-item-quantity">
               Quantidade:
