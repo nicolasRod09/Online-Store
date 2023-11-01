@@ -3,32 +3,37 @@ import { Link } from 'react-router-dom';
 import * as api from '../../services/api';
 import Loading from '../Loading/Loading';
 import Header from '../Header/Header';
-
-const VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+import '../../style/details.css'
 
 type DetalhesType = {
   id: string;
   title: string;
-  thumbnail: string;
+  pictures: [{
+    secure_url: string;
+  }];
   price: number;
-  description?: string
+  description?: string;
+  category_id: string;
 };
 
-const INITIAL_DETALHE = {
+const INITIAL_DETALHE: DetalhesType = {
   id: '',
   title: '',
   price: 0,
-  thumbnail: '',
+  pictures: [{
+    secure_url: '',
+  }],
+  category_id: '',
 };
 
 type Review = {
-  email: string;
+  nickname: string;
   rating: string;
   text: string;
 };
 
 const initialState: Review = {
-  email: '',
+  nickname: '',
   rating: '',
   text: '',
 };
@@ -39,6 +44,7 @@ function Detalhes() {
   const [form, setForm] = useState<Review>(initialState);
   const [evaluations, setEvaluations] = useState<Review[]>([]);
   const [isVerified, setIsVerified] = useState<boolean>(false);
+
   useEffect(() => {
     const productDetails = async () => {
       const detalhes = await api.getProductById(window.location.pathname);
@@ -64,7 +70,7 @@ function Detalhes() {
     if (itemCart) {
       itemCart.quantity += 1;
     } else {
-      cart.push({ ...details, quantity: 1 }); // Usando 'details' em vez de 'product'
+      cart.push({ ...details, quantity: 1 });
     }
 
     const newTotalCartItems = cart.reduce(
@@ -76,7 +82,7 @@ function Detalhes() {
   };
 
   const handleForm = (event:
-  React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setForm((prevForm) => ({
       ...prevForm,
@@ -86,7 +92,7 @@ function Detalhes() {
 
   const handleSubmitReview = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!form.email || !form.email.match(VALID_EMAIL_REGEX) || !form.rating) {
+    if (!form.nickname || !form.rating) {
       setIsVerified(true);
     } else {
       setIsVerified(false);
@@ -96,108 +102,171 @@ function Detalhes() {
       setForm(initialState);
     }
   };
+
+  const handleSearch = async () => {
+    console.log('Header');
+  };
+
+  console.log(details.category_id);
+
   return (
     <div>
-      <Header cartItens={totalCartItems}  />
-      { details ? (
-        <div className="details-card">
-          <div className="details-title">
-            <h1 data-testid="product-detail-name">{details.title}</h1>
+      <Header cartItens={totalCartItems} func={handleSearch} display={false} />
+      <div className="details-display">
+        {details ? (
+          <div>
+            <div className="product-name">
+              <h1 data-testid="product-detail-name" className="product-detail-name">{details.title}</h1>
+            </div>
+            <div className="card">
+              <div className="detail-card">
+                <div className="centralize">
+                  <main>
+                    <div className="product">
+                      <div className="detail-img">
+                        <img
+                          src={details.pictures[0].secure_url}
+                          alt="Imagem do produto"
+                          data-testid="product-detail-image"
+                          className="product-img"
+                        />
+                      </div>
+                      <div className="product-card">
+                        <h2
+                          data-testid="product-detail-price"
+                          className="product-price"
+                        >
+                          {details.price.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                            minimumFractionDigits: 2,
+                          })
+                          }
+                        </h2>
+                        <button
+                          data-testid="product-detail-add-to-cart"
+                          onClick={addToCart}
+                          className="add-to-cart-btn"
+                        >
+                          Adicionar ao carrinho
+                        </button>
+                        {details.description ? (
+                          <div className="details-description">
+                            <h4>Descrição</h4>
+                            <p>{details.description}</p>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </div>
+                    <div className="form">
+                      <form className="avaliation-form">
+                        <div className="user">
+                          <div className="identification">
+                            <label className="nickname-label" htmlFor="nickname">
+                              <p className="commentary">
+                                Usuario:
+                              </p>
+                            </label>
+                            <br />
+                            <input
+                              type="email"
+                              data-testid="product-detail-email"
+                              name="nickname"
+                              onChange={handleForm}
+                              value={form.nickname}
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+                        <div className="mb-4">
+                          <p>Avaliação:</p>
+                          {[1, 2, 3, 4, 5].map((rating) => (
+                            <label key={rating}>
+                              {rating}
+                              <input
+                                type="radio"
+                                name="rating"
+                                onChange={handleForm}
+                                data-testid={`${rating}-rating`}
+                                value={rating.toString()}
+                                className="ml-2"
+                              />
+                            </label>
+                          ))}
+                        </div>
+
+                        <div className="commentary-box">
+                          <label>
+                            <p className="commentary">
+                              Comentário:
+                            </p>
+                            <br />
+                            <textarea
+                              data-testid="product-detail-evaluation"
+                              name="text"
+                              onChange={handleForm}
+                              value={form.text}
+                              className="textArea"
+                              rows={5}
+                              cols={40}
+                              style={{ resize: 'none' }}
+                            />
+                          </label>
+                        </div>
+                        <br />
+                        <button
+                          data-testid="submit-review-btn"
+                          onClick={handleSubmitReview}
+                        >
+                          Enviar
+                        </button>
+                        {isVerified && (
+                          <p data-testid="error-msg">
+                            Campos inválidos
+                          </p>
+                        )}
+                      </form>
+                    </div>
+                  </main>
+                </div>
+              </div>
+              {evaluations.length ? (
+                <div className="evaluation-map">
+                  {evaluations.length ? (
+                    <h2>Comentários</h2>
+                  ) : (
+                    ''
+                  )}
+                  {evaluations.map((evaluation) => (
+                    <div key={evaluation.text} className="evaluation">
+                      <h3 data-testid="review-card-email">
+                        {evaluation.nickname}
+                      </h3>
+                      <h4 data-testid="review-card-rating">
+                        {'Avaliação: '}
+                        {evaluation.rating}
+                      </h4>
+                      <p data-testid="review-card-evaluation">
+                        {evaluation.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                ''
+              )}
+              <Link to="/" className="back-btn">
+                Voltar
+              </Link>
+            </div>
           </div>
-          <img
-            src={ details.thumbnail }
-            alt="Imagem do produto"
-            data-testid="product-detail-image"
-          />
-          <h3 data-testid="product-detail-price">{details.price}</h3>
-          <p>{ details.description }</p>
-          <Link to="/Cart" data-testid="shopping-cart-button">
-            <p data-testid="shopping-cart-size">
-              Carrinho (
-              {totalCartItems}
-              {' '}
-              itens)
-            </p>
-          </Link>
-        </div>
-      ) : (
-        <Loading />
-      )}
-      <button
-        data-testid="product-detail-add-to-cart"
-        onClick={ addToCart }
-      >
-        Adicionar ao carrinho
-      </button>
-      <Link to="/" className="mt-4 block">
-        Voltar
-      </Link>
-      <form className="w-full max-w-sm mt-8">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-            Email:
-          </label>
-          <input
-            type="email"
-            data-testid="product-detail-email"
-            name="email"
-            onChange={handleForm}
-            value={form.email}
-            className="form-control appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          />
-        </div>
-        <div className="mb-4">
-          <p className="text-gray-700 text-sm font-bold mb-2">Avaliação</p>
-          {[1, 2, 3, 4, 5].map((rating) => (
-            <label key={rating} className="block text-gray-500">
-              {rating}
-              <input
-                type="radio"
-                name="rating"
-                onChange={handleForm}
-                data-testid={`${rating}-rating`}
-                value={rating.toString()}
-                className="ml-2"
-              />
-            </label>
-          ))}
-        </div>
-        <textarea
-          data-testid="product-detail-evaluation"
-          name="text"
-          onChange={handleForm}
-          value={form.text}
-          className="form-control appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-24 resize-none"
-        />
-        <button
-          data-testid="submit-review-btn"
-          onClick={handleSubmitReview}
-          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Enviar
-        </button>
-        {isVerified && (
-          <p data-testid="error-msg" className="text-red-500 text-sm mt-2">
-            Campos inválidos
-          </p>
+        ) : (
+          <Loading />
         )}
-      </form>
-      <div className="mt-8">
-        {evaluations.map((evaluation) => (
-          <div key={evaluation.text} className="mb-4 border p-4">
-            <h3 data-testid="review-card-email" className="text-lg font-semibold">
-              {evaluation.email}
-            </h3>
-            <h4 data-testid="review-card-rating" className="text-md font-medium mt-2">
-              {evaluation.rating}
-            </h4>
-            <p data-testid="review-card-evaluation" className="text-gray-700 mt-2">
-              {evaluation.text}
-            </p>
-          </div>
-        ))}
       </div>
-    </div>
+    </div >
   );
 }
 export default Detalhes;

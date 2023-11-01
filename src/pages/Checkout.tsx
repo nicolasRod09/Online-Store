@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, redirect, useNavigate } from 'react-router-dom';
+import '../style/checkout.css';
 
 type Product = {
   id: number;
@@ -10,7 +11,7 @@ type Product = {
 };
 
 type CheckoutProps = {
-  cleanCart: () => void
+  cleanCart: () => void;
 };
 
 function CheckoutPage(prop: CheckoutProps) {
@@ -51,6 +52,7 @@ function CheckoutPage(prop: CheckoutProps) {
       navigate('/');
     }
   }
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -60,87 +62,88 @@ function CheckoutPage(prop: CheckoutProps) {
   };
 
   return (
-    <div>
-      <h2>Checkout - Carrinho de Compras</h2>
-      <ul>
+    <div className="checkout-container">
+      <h2 className="checkout-title">Checkout - Carrinho de Compras</h2>
+      <ul className="checkout-items-list">
         {cart.map((product) => (
-          <li key={ product.id } className="cart-item">
+          <li key={product.id} className="checkout-item">
             <h3>{product.title}</h3>
-            <img src={ product.thumbnail } alt={ product.title } />
-            <p>
+            <img src={product.thumbnail} alt={product.title} />
+            <p className="checkout-item-price">
               Preço: R$
               {product.price}
             </p>
-            <p>
+            <p className="checkout-item-quantity">
               Quantidade:
               {product.quantity}
             </p>
           </li>
         ))}
       </ul>
-      <p>
+      <p className="checkout-total">
         Total da Compra: R$
         {calculateTotal()}
       </p>
-      <form onSubmit={ handleSubmit }>
-        <input
-          type="text"
-          name="fullname"
-          placeholder="Nome completo"
-          data-testid="checkout-fullname"
-          value={ formData.fullname }
-          onChange={ handleChange }
-
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="E-mail"
-          data-testid="checkout-email"
-          value={ formData.email }
-          onChange={ handleChange }
-
-        />
-        <input
-          type="text"
-          name="cpf"
-          placeholder="CPF"
-          data-testid="checkout-cpf"
-          value={ formData.cpf }
-          onChange={ handleChange }
-        />
-        <input
-          type="text"
-          name="phone"
-          placeholder="Telefone"
-          data-testid="checkout-phone"
-          value={ formData.phone }
-          onChange={ handleChange }
-        />
-        <input
-          type="text"
-          name="cep"
-          placeholder="CEP"
-          data-testid="checkout-cep"
-          value={ formData.cep }
-          onChange={ handleChange }
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Endereço"
-          data-testid="checkout-address"
-          value={ formData.address }
-          onChange={ handleChange }
-        />
-        <div>
+      <form onSubmit={handleSubmit} className="checkout-form">
+        <div className="checkout-user-data">
+          <input
+            type="text"
+            name="fullname"
+            placeholder="Nome completo"
+            data-testid="checkout-fullname"
+            value={formData.fullname}
+            onChange={handleChange}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="E-mail"
+            data-testid="checkout-email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="cpf"
+            placeholder="CPF"
+            data-testid="checkout-cpf"
+            value={formData.cpf}
+            onChange={handleChange}
+          />
+          <br />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Telefone"
+            data-testid="checkout-phone"
+            value={formData.phone}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="cep"
+            placeholder="CEP"
+            data-testid="checkout-cep"
+            value={formData.cep}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="address"
+            placeholder="Endereço"
+            data-testid="checkout-address"
+            value={formData.address}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="checkout-payment-method">
           <label>
             <input
               type="radio"
               name="paymentMethod"
               value="boleto"
               data-testid="ticket-payment"
-              onChange={ handleChange }
+              onChange={handleChange}
             />
             Boleto
           </label>
@@ -150,7 +153,7 @@ function CheckoutPage(prop: CheckoutProps) {
               name="paymentMethod"
               value="visa"
               data-testid="visa-payment"
-              onChange={ handleChange }
+              onChange={handleChange}
             />
             Visa
           </label>
@@ -160,8 +163,7 @@ function CheckoutPage(prop: CheckoutProps) {
               name="paymentMethod"
               value="mastercard"
               data-testid="master-payment"
-              onChange={ handleChange }
-
+              onChange={handleChange}
             />
             MasterCard
           </label>
@@ -171,21 +173,17 @@ function CheckoutPage(prop: CheckoutProps) {
               name="paymentMethod"
               value="elo"
               data-testid="elo-payment"
-              onChange={ handleChange }
-
+              onChange={handleChange}
             />
             Elo
           </label>
         </div>
-        <button
-          type="submit"
-          data-testid="checkout-btn"
-        >
+        <button type="submit" data-testid="checkout-btn" className="checkout-button" onClick={handleSubmit}>
           Finalizar Compra
         </button>
-        {errorMsg && <p data-testid="error-msg">Campos inválidos</p>}
+        {errorMsg && <p data-testid="error-msg" className="checkout-error-message">Campos inválidos</p>}
       </form>
-      <Link to="/">Continuar Comprando</Link>
+      <Link to="/" className="checkout-continue-shopping-link">Continuar Comprando</Link>
     </div>
   );
 }
