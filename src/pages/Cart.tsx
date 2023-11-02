@@ -96,7 +96,11 @@ function CartPage() {
               <h3 data-testid="shopping-cart-product-name">{product.title}</h3>
               <img src={product.thumbnail} alt={product.title} className="product-image" />
               <p>
-                Preço: R${product.price}
+                Preço: R${product.price.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 2,
+                })}
               </p>
               <p data-testid="shopping-cart-product-quantity">
                 Quantidade: {product.quantity}

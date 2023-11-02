@@ -36,7 +36,11 @@ function CheckoutPage(prop: CheckoutProps) {
   }, []);
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+    });
   };
 
   const formKeys = Object.values(formData);
